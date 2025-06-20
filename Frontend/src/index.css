@@ -1,0 +1,4 @@
+/* or styles.css based on init */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
