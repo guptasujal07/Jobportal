@@ -3,8 +3,13 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { RadioGroup, } from '../ui/radio-group'
 import { Button } from '../ui/button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { USER_API_END_POINT } from '../utils/constant'
+import axios from "axios";
+import { Toaster, toast } from 'sonner';
+
+// import useNavigate from "react-router-dom";
 
 
 const Login = () => {
@@ -16,28 +21,29 @@ const Login = () => {
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
+    const navigate = useNavigate();
 
 
 
-   const submitHandler = async (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
 
         try {
-            const res = await axios.post(`${USER_API_END_POINT}/login`,input,{
-                headers:{
-                    "Content-Type":"application/json"
+            const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                withCredentials:true,
+                withCredentials: true,
             });
-            if(res.data.success){
+            if (res.data.success) {
                 navigate("/")
                 toast.success(res.data.message);
             }
         } catch (error) {
             console.log(error);
-             toast.error(error.response.data.message);
-            
-            
+            toast.error(error.response.data.message);
+
+
         }
     }
 
@@ -99,6 +105,7 @@ const Login = () => {
 
                 </form>
             </div>
+            <Toaster />
         </div>
     )
 }

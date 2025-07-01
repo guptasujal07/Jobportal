@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { LogOut, User2 } from 'lucide-react'
 
 const Navbar = () => {
-  const user = false // Change to true to test avatar menu
+  const user = false// Change to true to test avatar menu
 
   return (
     <div className="bg-white shadow-sm">
