@@ -58,7 +58,7 @@ const Navbar = () => {
                   className="w-full justify-start gap-2 text-sm"
                 >
                   <User2 className="w-4 h-4" />
-                  View Profile
+                  <Link to ="/profile">View Profile</Link>
                 </Button>
                 <Button
                   variant="ghost"
