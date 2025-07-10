@@ -73,84 +73,59 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
   }
 
   return (
-    <Dialog open={open}>
-      <DialogContent className="sm:max-w-[425px]" onInteractOutside={() => setOpen(false)}>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent
+        className="sm:max-w-[480px] bg-white rounded-xl p-6 shadow-md"
+      >
         <DialogHeader>
-          <DialogTitle>Update Profile</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-gray-800">
+            Update Profile
+          </DialogTitle>
         </DialogHeader>
-        <form onSubmit={submitHandler}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullname" className="text-right">Name</Label>
+
+        <form onSubmit={submitHandler} className="space-y-5 mt-2">
+          {[
+            { id: 'fullname', label: 'Name', type: 'text' },
+            { id: 'email', label: 'Email', type: 'email' },
+            { id: 'phoneNumber', label: 'Number', type: 'text' },
+            { id: 'bio', label: 'Bio', type: 'text' },
+            { id: 'skills', label: 'Skills', type: 'text' }
+          ].map(({ id, label, type }) => (
+            <div key={id} className="flex flex-col gap-1">
+              <Label htmlFor={id} className="text-sm font-medium text-gray-700">{label}</Label>
               <Input
-                id="fullname"
-                name="fullname"
-                value={input.fullname}
+                id={id}
+                name={id}
+                type={type}
+                value={input[id]}
                 onChange={changeEventHandler}
-                className="col-span-3"
+                className="bg-gray-50 border border-gray-300 focus:ring-primary focus:border-primary rounded-md"
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={input.email}
-                onChange={changeEventHandler}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phoneNumber" className="text-right">Number</Label>
-              <Input
-                id="phoneNumber"
-                name="phoneNumber"
-                value={input.phoneNumber}
-                onChange={changeEventHandler}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="bio" className="text-right">Bio</Label>
-              <Input
-                id="bio"
-                name="bio"
-                value={input.bio}
-                onChange={changeEventHandler}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="skills" className="text-right">Skills</Label>
-              <Input
-                id="skills"
-                name="skills"
-                value={input.skills}
-                onChange={changeEventHandler}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="file" className="text-right">Resume</Label>
-              <Input
-                id="file"
-                name="file"
-                type="file"
-                accept="application/pdf"
-                onChange={fileChangeHandler}
-                className="col-span-3"
-              />
-            </div>
+          ))}
+
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="file" className="text-sm font-medium text-gray-700">Resume (PDF)</Label>
+            <Input
+              id="file"
+              name="file"
+              type="file"
+              accept="application/pdf"
+              onChange={fileChangeHandler}
+              className="bg-gray-50 border border-gray-300 rounded-md"
+            />
           </div>
-          <DialogFooter>
+
+          <DialogFooter className="mt-5">
             {loading ? (
-              <Button className="w-full my-4" disabled>
+              <Button className="w-full" disabled>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Please wait
               </Button>
             ) : (
-              <Button type="submit" className="w-full my-4">Update</Button>
+              <Button type="submit" className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                Update
+              </Button>
             )}
           </DialogFooter>
         </form>
