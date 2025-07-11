@@ -12,9 +12,12 @@ import { Button } from './ui/button'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { USER_API_END_POINT } from './utils/constant'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../redux/authSlice.js'
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
 
   const [input, setInput] = useState({
     fullname: '',
@@ -43,6 +46,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     formData.append('bio', input.bio)
     formData.append('skills', input.skills)
 
+
     if (input.file) {
       formData.append('file', input.file)
     }
@@ -62,8 +66,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         throw new Error(data.message || 'Failed to update profile')
       }
 
-      toast.success(data.message || 'Profile updated successfully')
-      setOpen(false)
+      if (response.status === 200) {
+        toast.success(data.message || 'Profile updated successfully')
+        setOpen(false)
+        dispatch(setUser(data.user))
+
+
+      }
+
+
     } catch (error) {
       console.error(error)
       toast.error(error.message || 'Something went wrong')

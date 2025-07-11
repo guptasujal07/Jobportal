@@ -9,7 +9,7 @@ import { USER_API_END_POINT } from '../utils/constant';
 import axios from 'axios';
 import { Toaster, toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading, setUser } from '@/redux/authSlice';
+import { setLoading, setUser } from '@/redux/authSlice.js';
 import { Loader2 } from 'lucide-react';
 
 const Login = () => {
