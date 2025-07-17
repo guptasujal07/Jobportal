@@ -122,6 +122,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
               name="file"
               type="file"
               accept="application/pdf"
+              
               onChange={fileChangeHandler}
               className="bg-gray-50 border border-gray-300 rounded-md"
             />

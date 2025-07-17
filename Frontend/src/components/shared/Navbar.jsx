@@ -4,24 +4,42 @@ import { Button } from '../ui/button';
 import { Avatar, AvatarImage } from '../ui/avatar';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, User2 } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { USER_API_END_POINT } from '../utils/constant';
+import { toast } from 'sonner';
+import { setUser } from '@/redux/authSlice';
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+   const logoutHandler = async () => {
+        try {
+            const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
+            if (res.data.success) {
+                dispatch(setUser(null));
+                navigate("/");
+                toast.success(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message);
+        }
+    }
 
   return (
     <div className="bg-white shadow-sm">
       <div className="flex items-center justify-between max-w-7xl mx-auto h-16 px-4">
-        
-        
+
+
         <div>
           <h1 className="text-2xl font-bold">
             job<span className="text-[#F83002]">portal</span>
           </h1>
         </div>
 
-        
+
         <div className="flex items-center gap-6 ml-auto">
           <ul className="flex font-medium items-center gap-5">
             <li><Link to="/" className="text-gray-700 hover:text-black transition">Home</Link></li>
@@ -58,7 +76,7 @@ const Navbar = () => {
                   className="w-full justify-start gap-2 text-sm"
                 >
                   <User2 className="w-4 h-4" />
-                  <Link to ="/profile">View Profile</Link>
+                  <Link to="/profile">View Profile</Link>
                 </Button>
                 <Button
                   variant="ghost"
