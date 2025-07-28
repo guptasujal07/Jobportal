@@ -1,28 +1,26 @@
 import React from 'react';
 import LatestJobCards from './LatestJobCards';
+import { useSelector } from 'react-redux';
 
-const randomJobs = [
-  { id: 1, title: 'Frontend Developer', company: 'Google' },
-  { id: 2, title: 'Backend Developer', company: 'Amazon' },
-  { id: 3, title: 'Full Stack Engineer', company: 'Meta' },
-  { id: 4, title: 'UI/UX Designer', company: 'Netflix' },
-  { id: 5, title: 'DevOps Engineer', company: 'Flipkart' },
-  { id: 6, title: 'Data Scientist', company: 'Microsoft' },
-  { id: 7, title: 'QA Engineer', company: 'Adobe' },
-];
 
 const LatestJobs = () => {
+  
+  const allJobs = useSelector((store) => store.job?.allJobs || []);
+
   return (
-    <div className='max-w-7xl mx-auto my-20'>
+    <div className='max-w-7xl mx-auto my-20 px-4'>
       <h1 className='text-4xl font-bold'>
         <span className='text-[#6A38C2]'>Latest & Top </span> Job Openings
       </h1>
-      <div className='grid grid-cols-3 gap-4 my-5'>
-        {
-          randomJobs.slice(0, 6).map((item) => (
-            <LatestJobCards key={item.id} job={item} />
+
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-5'>
+        {allJobs.length === 0 ? (
+          <span className="text-gray-500 text-lg col-span-full">No Job Available</span>
+        ) : (
+          allJobs.slice(0, 6).map((job) => (
+            <LatestJobCards key={job._id || job.id} job={job} />
           ))
-        }
+        )}
       </div>
     </div>
   );

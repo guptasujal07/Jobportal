@@ -1,9 +1,34 @@
 import React from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
+import axios from 'axios';
+import { APPLICATION_API_END_POINT } from './utils/constant';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSingleJob } from '../redux/jobSlice';
+import { useParams } from 'react-router-dom';
 
 const JobDescription = () => {
   const isApplied = true;
+    const params = useParams();
+    const jobId = params.id;
+   const {setSingleJob} = useSelector(store => store.job);
+  
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        const fetchSingleJob = async () => {
+            try {
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`,{withCredentials:true});
+                if(res.data.success){
+                    dispatch(setSingleJob(res.data.job));
+
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSingleJob(); 
+    },[jobId,dispatch, user?._id]);
 
   return (
     <div className='max-w-7xl mx-auto my-10'>
