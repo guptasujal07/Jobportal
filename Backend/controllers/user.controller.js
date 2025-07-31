@@ -1,8 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import getDataUri from "../utils/dataUri.js"; 
-import cloudinary from "../config/cloudinary.js"; 
+import getDataUri from "../utils/dataUri.js";
+import cloudinary from "../config/cloudinary.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -114,7 +114,8 @@ export const login = async (req, res) => {
             .cookie("token", token, {
                 maxAge: 24 * 60 * 60 * 1000,
                 httpOnly: true,
-                sameSite: "strict",
+                secure: false,
+                sameSite: "lax",
             })
             .json({
                 message: `Welcome back ${user.fullname}`,

@@ -6,16 +6,24 @@ export const postJob = async (req, res) => {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
         const userId = req.id;
 
+
         if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
             return res.status(400).json({
                 message: "Somethin is missing.",
                 success: false
             })
         };
+
+        const processedRequirements = Array.isArray(requirements)
+            ? requirements
+            : requirements.split(',').map(r => r.trim());
+
+
+
         const job = await Job.create({
             title,
             description,
-            requirements: requirements.split(","),
+            requirements: processedRequirements,
             salary: Number(salary),
             location,
             jobType,
@@ -65,7 +73,7 @@ export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
         const job = await Job.findById(jobId).populate({
-            path:"applications"
+            path: "applications"
         });
         if (!job) {
             return res.status(404).json({
@@ -83,8 +91,8 @@ export const getAdminJobs = async (req, res) => {
     try {
         const adminId = req.id;
         const jobs = await Job.find({ created_by: adminId }).populate({
-            path:'company',
-            createdAt:-1
+            path: 'company',
+            createdAt: -1
         });
         if (!jobs) {
             return res.status(404).json({

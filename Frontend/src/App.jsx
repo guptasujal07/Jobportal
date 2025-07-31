@@ -35,7 +35,7 @@ const appRouter = createBrowserRouter([
     element: <Profile />
   },
    {
-    path: "/description/:id",
+    path: "/jobs/description/:id",
     element: <JobDescription />
   }
 ]);
