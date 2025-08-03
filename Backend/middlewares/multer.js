@@ -6,3 +6,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 export const singleUpload = upload.single("file"); // "file" is the name of the field in formData
+
+// Optional file upload middleware
+export const optionalUpload = upload.single("file");

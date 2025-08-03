@@ -36,29 +36,28 @@ const CompanySetup = () => {
 
         const submitHandler = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("name", input.name);
-        formData.append("description", input.description);
-        formData.append("website", input.website);
-        formData.append("location", input.location);
-        if (input.file) {
-            formData.append("file", input.file);
-        }
+        const updateData = {
+            name: input.name,
+            description: input.description,
+            website: input.website,
+            location: input.location
+        };
+        
         try {
             setLoading(true);
-            const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
+            const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, updateData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 },
                 withCredentials: true
             });
             if (res.data.success) {
                 toast.success(res.data.message);
-                Navigate("/admin/companies");
+                navigate("/admin/companies");
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
@@ -99,8 +98,8 @@ const CompanySetup = () => {
                             <Label>Description</Label>
                             <Input
                                 type="text"
-                                name="Description"
-                                value={input.Description}
+                                name="description"
+                                value={input.description}
                                 onChange={changeEventHandler}
                             />
                         </div>
@@ -108,8 +107,8 @@ const CompanySetup = () => {
                             <Label>Website</Label>
                             <Input
                                 type="text"
-                                name="Website"
-                                value={input.Website}
+                                name="website"
+                                value={input.website}
                                 onChange={changeEventHandler}
                             />
                         </div>
@@ -117,8 +116,8 @@ const CompanySetup = () => {
                             <Label>Location</Label>
                             <Input
                                 type="text"
-                                name="Location"
-                                value={input.Location}
+                                name="location"
+                                value={input.location}
                                 onChange={changeEventHandler}
                             />
                         </div>
