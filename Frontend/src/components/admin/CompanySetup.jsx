@@ -6,14 +6,17 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { useState } from 'react'
 import axios from 'axios'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import {  useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { COMPANY_API_END_POINT } from '../utils/constant'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
+import useGetCompanyById from '@/hooks/useGetCompanyById'
 
 const CompanySetup = () => {
      const params = useParams();
+      useGetCompanyById(params.id);
+    
     const [input, setInput] = useState({
         name: "",
         description: "",
@@ -36,18 +39,22 @@ const CompanySetup = () => {
 
         const submitHandler = async (e) => {
         e.preventDefault();
-        const updateData = {
-            name: input.name,
-            description: input.description,
-            website: input.website,
-            location: input.location
-        };
+        
+        const formData = new FormData();
+        formData.append('name', input.name);
+        formData.append('description', input.description);
+        formData.append('website', input.website);
+        formData.append('location', input.location);
+        
+        if (input.file) {
+            formData.append('file', input.file);
+        }
         
         try {
             setLoading(true);
-            const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, updateData, {
+            const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 },
                 withCredentials: true
             });
@@ -64,13 +71,16 @@ const CompanySetup = () => {
     }
 
        useEffect(() => {
-        setInput({
-            name: singleCompany.name || "",
-            description: singleCompany.description || "",
-            website: singleCompany.website || "",
-            location: singleCompany.location || "",
-            file: singleCompany.file || null
-        })
+        console.log("singleCompany:", singleCompany);
+        if (singleCompany) {
+            setInput({
+                name: singleCompany.name || "",
+                description: singleCompany.description || "",
+                website: singleCompany.website || "",
+                location: singleCompany.location || "",
+                file: null // We don't populate file input with existing logo
+            })
+        }
     },[singleCompany]);
     return (
         <div>
@@ -78,7 +88,7 @@ const CompanySetup = () => {
             <div className='max-w-xl mx-auto my-10'>
                 <form onSubmit={submitHandler}>
                     <div className='flex items-center gap-5 p-8'>
-                         <Button onClick={() => navigate("/admin/companies")} variant="outline" className="flex items-center gap-2 text-gray-500 font-semibold">
+                         <Button type="button" onClick={() => navigate("/admin/companies")} variant="outline" className="flex items-center gap-2 text-gray-500 font-semibold">
                             <ArrowLeft />
                             <span>Back</span>
                         </Button>
