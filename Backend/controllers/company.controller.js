@@ -76,7 +76,8 @@ export const updateCompany = async (req, res) => {
     try {
         const { name, description, website, location } = req.body;
         const file = req.file;
-        
+        // console.log("logo from the frontend", file);
+
         let updateData = { name, description, website, location };
 
         // Only process file upload if a file is provided
@@ -85,6 +86,7 @@ export const updateCompany = async (req, res) => {
                 const fileUri = getDataUri(file);
                 const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
                 const logo = cloudResponse.secure_url;
+                // console.log("logo url after uplaoding", logo)
                 updateData.logo = logo;
             } catch (uploadError) {
                 console.log("File upload error:", uploadError);
@@ -96,6 +98,7 @@ export const updateCompany = async (req, res) => {
         }
 
         const company = await Company.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        // console.log("updated company=>",company)
 
         if (!company) {
             return res.status(404).json({
@@ -105,7 +108,8 @@ export const updateCompany = async (req, res) => {
         }
         return res.status(200).json({
             message: "Company information updated.",
-            success: true
+            success: true,
+            company
         })
 
     } catch (error) {
