@@ -1,4 +1,4 @@
-import { COMPANY_API_END_POINT } from '@/components/utils/constant';
+import { JOB_API_END_POINT } from '@/components/utils/constant';
 import { setAllAdminJobs } from '@/redux/jobSlice';
 import axios from 'axios';
 import { useEffect } from 'react'
@@ -9,17 +9,17 @@ const useGetAllAdminJobs = () => {
     useEffect(() => {
         const fetchAllAdminJobs = async () => {
             try {
-                const res = await axios.get(`${COMPANY_API_END_POINT}/get`, { withCredentials: true });
+                const res = await axios.get(`${JOB_API_END_POINT}/getadminjobs`, { withCredentials: true });
                 if (res.data.success) {
-                    console.log("checking admin hook", res.data)
-                    dispatch(setAllAdminJobs(res.data.companies));
+                    console.log("Admin jobs fetched:", res.data.jobs);
+                    dispatch(setAllAdminJobs(res.data.jobs));
                 }
             } catch (error) {
                 console.log(error);
             }
         }
         fetchAllAdminJobs();
-    }, [])
+    }, [dispatch])
 }
 
 

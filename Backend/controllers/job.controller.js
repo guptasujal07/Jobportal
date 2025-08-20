@@ -4,6 +4,7 @@ import { Job } from "../models/job.model.js";
 export const postJob = async (req, res) => {
     try {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
+        console.log("title coming from frontend", title);
         const userId = req.id;
 
 
@@ -52,7 +53,8 @@ export const getAllJobs = async (req, res) => {
             ]
         };
         const jobs = await Job.find(query).populate({
-            path: "company"
+            path: "company",
+            select: "name logo"
         }).sort({ createdAt: -1 });
         if (!jobs) {
             return res.status(404).json({

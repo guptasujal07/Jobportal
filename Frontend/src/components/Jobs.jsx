@@ -14,7 +14,7 @@ const Jobs = () => {
         const response = await fetch('http://localhost:8000/api/v1/job/get', { credentials: 'include', }); // Backend route
         const data = await response.json();
 
-        console.log(data)
+        console.log("jobs for student role",data)
         setJobs(data.jobs || data); // Adjust depending on your API response
         // setJobs((prev)=>[...,])
       } catch (error) {
