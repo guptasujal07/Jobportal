@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { USER_API_END_POINT } from '../utils/constant';
 import axios from 'axios';
-import { Toaster, toast } from 'sonner';
+import {  toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setUser } from '@/redux/authSlice.js';
 import { Loader2 } from 'lucide-react';
