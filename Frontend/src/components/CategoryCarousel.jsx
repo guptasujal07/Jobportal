@@ -3,6 +3,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Button } from './ui/button';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setSearchedQuery } from '@/redux/jobSlice';
 
 
 const category = [
@@ -13,7 +14,6 @@ const category = [
     "FullStack Developer"
 ]
 
-
 const CategoryCarousel = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -21,8 +21,9 @@ const CategoryCarousel = () => {
         dispatch(setSearchedQuery(query));
         navigate("/browse");
     }
-  return (
-     <div>
+
+    return (
+        <div>
             <Carousel className="w-full max-w-xl mx-auto my-20">
                 <CarouselContent>
                     {
@@ -37,7 +38,7 @@ const CategoryCarousel = () => {
                 <CarouselNext />
             </Carousel>
         </div>
-  )
+    )
 }
 
 export default CategoryCarousel

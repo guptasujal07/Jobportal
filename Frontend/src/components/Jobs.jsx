@@ -2,58 +2,61 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './shared/Navbar';
 import Job from './Job';
 import FilterCard from './FilterCard';
+import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 const Jobs = () => {
-  const [jobs, setJobs] = useState([]);
-  console.log('jobs', jobs)
-  const [loading, setLoading] = useState(true); // FIXED: Added loading state
+  const { allJobs, searchedQuery } = useSelector(store => store.job);
+  const [filterJobs, setFilterJobs] = useState(allJobs);
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/v1/job/get', { credentials: 'include', }); // Backend route
-        const data = await response.json();
-
-        console.log("jobs for student role",data)
-        setJobs(data.jobs || data); // Adjust depending on your API response
-        // setJobs((prev)=>[...,])
-      } catch (error) {
-        console.error('Error fetching jobs:', error);
-      } finally {
-        setLoading(false); // Always runs
-      }
-    };
-
-    fetchJobs();
-  }, []);
+    if (searchedQuery) {
+      const filteredJobs = allJobs.filter((job) => {
+        return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
+          job.location.toLowerCase().includes(searchedQuery.toLowerCase())
+          
+      })
+      setFilterJobs(filteredJobs)
+    } else {
+      setFilterJobs(allJobs)
+    }
+  }, [allJobs, searchedQuery]);
 
   return (
     <div>
       <Navbar />
       <div className='max-w-7xl mx-auto mt-5'>
         <div className='flex gap-5'>
-          <div className='w-1/5'>
+          <div className='w-20%'>
             <FilterCard />
           </div>
-          <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
-            {loading ? (
-              <span>Loading...</span>
-            ) : jobs.length <= 0 ? (
-              <span>No jobs found</span>
-            ) : (
-              <div className='grid grid-cols-3 gap-4'>
-                {jobs.map((item) => (
-                  <div key={item.id}>
-                    <Job job={item} />
-                  </div>
-                ))}
+          {
+            filterJobs.length <= 0 ? <span>Job not found</span> : (
+              <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
+                <div className='grid grid-cols-3 gap-4'>
+                  {
+                    filterJobs.map((job) => (
+                      <motion.div
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -100 }}
+                        transition={{ duration: 0.3 }}
+                        key={job?._id}>
+                        <Job job={job} />
+                      </motion.div>
+                    ))
+                  }
+                </div>
               </div>
-            )}
-          </div>
+            )
+          }
         </div>
       </div>
+
+
     </div>
-  );
-};
+  )
+}
 
 export default Jobs;
